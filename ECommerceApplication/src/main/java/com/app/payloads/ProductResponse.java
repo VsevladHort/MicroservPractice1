@@ -2,6 +2,7 @@ package com.app.payloads;
 
 import java.util.List;
 
+import com.app.cart.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

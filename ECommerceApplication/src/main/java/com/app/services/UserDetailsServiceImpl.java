@@ -2,6 +2,9 @@ package com.app.services;
 
 import java.util.Optional;
 
+import com.app.cart.ResourceNotFoundException;
+import com.app.user.services.User;
+import com.app.user.services.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,9 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.app.config.UserInfoConfig;
-import com.app.entites.User;
-import com.app.exceptions.ResourceNotFoundException;
-import com.app.repositories.UserRepo;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -1,5 +1,6 @@
 package com.app.payloads;
 
+import com.app.user.services.UserDTO;
 import lombok.Data;
 
 @Data

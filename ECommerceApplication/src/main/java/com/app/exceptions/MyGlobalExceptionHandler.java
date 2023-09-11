@@ -3,6 +3,8 @@ package com.app.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.app.cart.APIException;
+import com.app.cart.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -2,6 +2,8 @@ package com.app.controllers;
 
 import java.io.IOException;
 
+import com.app.cart.Product;
+import com.app.cart.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.config.AppConstants;
-import com.app.entites.Product;
-import com.app.payloads.ProductDTO;
 import com.app.payloads.ProductResponse;
 import com.app.services.ProductService;
 

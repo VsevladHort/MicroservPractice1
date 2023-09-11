@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.app.cart.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,17 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.app.entites.Cart;
-import com.app.entites.Category;
-import com.app.entites.Product;
-import com.app.exceptions.APIException;
-import com.app.exceptions.ResourceNotFoundException;
-import com.app.payloads.CartDTO;
-import com.app.payloads.ProductDTO;
 import com.app.payloads.ProductResponse;
-import com.app.repositories.CartRepo;
 import com.app.repositories.CategoryRepo;
-import com.app.repositories.ProductRepo;
 
 import jakarta.transaction.Transactional;
 

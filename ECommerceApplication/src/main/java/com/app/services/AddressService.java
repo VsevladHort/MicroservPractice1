@@ -2,8 +2,8 @@ package com.app.services;
 
 import java.util.List;
 
-import com.app.entites.Address;
 import com.app.payloads.AddressDTO;
+import com.app.user.services.Address;
 
 public interface AddressService {
 	

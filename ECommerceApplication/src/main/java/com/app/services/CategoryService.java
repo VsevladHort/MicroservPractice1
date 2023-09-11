@@ -1,6 +1,6 @@
 package com.app.services;
 
-import com.app.entites.Category;
+import com.app.cart.Category;
 import com.app.payloads.CategoryDTO;
 import com.app.payloads.CategoryResponse;
 

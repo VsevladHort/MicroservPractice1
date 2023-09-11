@@ -1,5 +1,6 @@
 package com.app.payloads;
 
+import com.app.cart.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

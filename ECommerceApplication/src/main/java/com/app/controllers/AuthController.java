@@ -3,6 +3,8 @@ package com.app.controllers;
 import java.util.Collections;
 import java.util.Map;
 
+import com.app.user.services.UserDTO;
+import com.app.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.exceptions.UserNotFoundException;
 import com.app.payloads.LoginCredentials;
-import com.app.payloads.UserDTO;
 import com.app.security.JWTUtil;
-import com.app.services.UserService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
