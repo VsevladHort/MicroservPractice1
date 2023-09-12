@@ -11,6 +11,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "E-Commerce Application")
@@ -30,11 +32,11 @@ public class CartController {
     }
 
     @GetMapping("/admin/carts")
-    public RedirectView getCarts() {
+    public ResponseEntity<List> getCarts() {
 
         String redirectUrl = cartService + "/admin/carts";
 
-        return new RedirectView(redirectUrl);
+        return getCartDTOResponseEntityList(redirectUrl);
     }
 
     //string%40string.com
@@ -55,6 +57,18 @@ public class CartController {
             ResponseEntity<CartDTO> response = restTemplate.postForEntity(redirectUrl, null, CartDTO.class);
 
             CartDTO cartDTO = response.getBody();
+
+            return new ResponseEntity<>(cartDTO, response.getStatusCode());
+        } catch (HttpClientErrorException e) {
+            throw new APIException(e.getMessage());
+        }
+    }
+
+    private ResponseEntity<List> getCartDTOResponseEntityList(String redirectUrl) {
+        try {
+            ResponseEntity<List> response = restTemplate.getForEntity(redirectUrl, List.class);
+
+            List cartDTO = response.getBody();
 
             return new ResponseEntity<>(cartDTO, response.getStatusCode());
         } catch (HttpClientErrorException e) {
