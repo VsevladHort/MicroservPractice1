@@ -3,6 +3,7 @@ package com.app.controllers;
 import java.util.Collections;
 import java.util.Map;
 
+import com.app.cart.APIException;
 import com.app.user.services.UserDTO;
 import com.app.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.app.security.JWTUtil;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
@@ -46,13 +48,20 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> registerHandler(@Valid @RequestBody UserDTO user) throws UserNotFoundException {
-        String url = userService + "/public/users/register";
+        UserDTO userDTO;
+        try {
+            String url = userService + "/public/users/register";
 
-        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(user);
+            HttpEntity<UserDTO> requestEntity = new HttpEntity<>(user);
 
-        ResponseEntity<UserDTO> response = restTemplate.postForEntity(url, requestEntity, UserDTO.class);
+            ResponseEntity<UserDTO> response = restTemplate.postForEntity(url, requestEntity, UserDTO.class);
 
-        UserDTO userDTO = response.getBody();
+            userDTO = response.getBody();
+
+        } catch (HttpClientErrorException e) {
+            throw new APIException(e.getMessage());
+        }
+
         if (userDTO == null) {
             throw new RuntimeException("Internal service error!");
         }

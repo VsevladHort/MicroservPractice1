@@ -1,4 +1,4 @@
-package com.app.cart;
+package com.app.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

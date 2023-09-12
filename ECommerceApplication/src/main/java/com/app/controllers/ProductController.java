@@ -2,8 +2,8 @@ package com.app.controllers;
 
 import java.io.IOException;
 
-import com.app.cart.Product;
 import com.app.cart.ProductDTO;
+import com.app.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

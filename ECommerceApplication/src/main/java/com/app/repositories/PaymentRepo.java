@@ -1,6 +1,6 @@
 package com.app.repositories;
 
-import com.app.cart.Payment;
+import com.app.entities.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

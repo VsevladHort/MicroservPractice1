@@ -2,8 +2,8 @@ package com.app.services;
 
 import java.io.IOException;
 
-import com.app.cart.Product;
 import com.app.cart.ProductDTO;
+import com.app.entities.Product;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.payloads.ProductResponse;

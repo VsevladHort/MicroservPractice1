@@ -1,5 +1,7 @@
 package com.app.cart;
 
+import com.app.entities.CartItem;
+import com.app.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

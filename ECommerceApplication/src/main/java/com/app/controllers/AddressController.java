@@ -2,7 +2,7 @@ package com.app.controllers;
 
 import java.util.List;
 
-import com.app.user.services.Address;
+import com.app.entities.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

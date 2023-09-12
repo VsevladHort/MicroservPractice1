@@ -1,4 +1,4 @@
-package com.app.user.services;
+package com.app.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

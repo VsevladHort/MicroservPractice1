@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.app.cart.*;
+import com.app.entities.*;
 import com.app.user.services.UserRepo;
 import com.app.user.services.UserService;
 import org.modelmapper.ModelMapper;

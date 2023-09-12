@@ -3,7 +3,7 @@ package com.app.services;
 import java.util.Optional;
 
 import com.app.cart.ResourceNotFoundException;
-import com.app.user.services.User;
+import com.app.entities.User;
 import com.app.user.services.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

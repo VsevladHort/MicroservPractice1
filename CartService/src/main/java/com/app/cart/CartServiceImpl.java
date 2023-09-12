@@ -1,5 +1,8 @@
 package com.app.cart;
 
+import com.app.entities.Cart;
+import com.app.entities.CartItem;
+import com.app.entities.Product;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +42,7 @@ public class CartServiceImpl implements CartService {
 			throw new APIException("Product " + product.getProductName() + " already exists in the cart");
 		}
 
-		if (product.getQuantity() == 0) {
+		if (product.getQuantity() == null || product.getQuantity() == 0) {
 			throw new APIException(product.getProductName() + " is not available");
 		}
 

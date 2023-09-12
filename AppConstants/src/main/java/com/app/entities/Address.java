@@ -1,4 +1,4 @@
-package com.app.cart;
+package com.app.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressCart {
+public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +46,9 @@ public class AddressCart {
 	private String pincode;
 
 	@ManyToMany(mappedBy = "addresses")
-	private List<UserCart> users = new ArrayList<>();
+	private List<User> users = new ArrayList<>();
 
-	public AddressCart(String country, String state, String city, String pincode, String street, String buildingName) {
+	public Address(String country, String state, String city, String pincode, String street, String buildingName) {
 		this.country = country;
 		this.state = state;
 		this.city = city;

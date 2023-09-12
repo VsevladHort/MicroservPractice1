@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import com.app.cart.APIException;
 import com.app.cart.ResourceNotFoundException;
-import com.app.user.services.Address;
+import com.app.entities.Address;
+import com.app.entities.User;
 import com.app.user.services.AddressRepo;
-import com.app.user.services.User;
 import com.app.user.services.UserRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

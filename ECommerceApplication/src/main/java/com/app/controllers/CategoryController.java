@@ -1,6 +1,6 @@
 package com.app.controllers;
 
-import com.app.cart.Category;
+import com.app.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

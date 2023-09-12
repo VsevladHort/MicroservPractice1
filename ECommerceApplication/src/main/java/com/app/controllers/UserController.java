@@ -61,7 +61,7 @@ public class UserController {
             @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_USERS_BY, required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder) {
 
-        String url = userServiceBaseUrl + "/getAllUsers";
+        String url = userServiceBaseUrl + "/admin/users";
 
         Map<String, Object> params = new HashMap<>();
         params.put("pageNumber", pageNumber);
@@ -76,7 +76,7 @@ public class UserController {
 
     @GetMapping("/public/users/{userId}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
-        String url = userServiceBaseUrl + "/getUserById/{userId}";
+        String url = userServiceBaseUrl + "/public/users/" + userId;
 
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
@@ -88,7 +88,7 @@ public class UserController {
 
     @PutMapping("/public/users/{userId}")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId) {
-        String url = userServiceBaseUrl + "/updateUser/{userId}";
+        String url = userServiceBaseUrl + "/public/users/" + userId;
 
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
@@ -108,7 +108,7 @@ public class UserController {
 
     @DeleteMapping("/admin/users/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        String url = userServiceBaseUrl + "/deleteUser/{userId}";
+        String url = userServiceBaseUrl + "/admin/users/" + userId;
 
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);

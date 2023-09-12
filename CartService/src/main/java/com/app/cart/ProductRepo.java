@@ -1,5 +1,6 @@
 package com.app.cart;
 
+import com.app.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

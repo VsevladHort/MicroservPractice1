@@ -1,11 +1,13 @@
 package com.app.controllers;
 
+import com.app.cart.APIException;
 import com.app.cart.CartDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -49,11 +51,15 @@ public class CartController {
     }
 
     private ResponseEntity<CartDTO> getCartDTOResponseEntity(String redirectUrl) {
-        ResponseEntity<CartDTO> response = restTemplate.postForEntity(redirectUrl, new Object(), CartDTO.class);
+        try {
+            ResponseEntity<CartDTO> response = restTemplate.postForEntity(redirectUrl, null, CartDTO.class);
 
-        CartDTO cartDTO = response.getBody();
+            CartDTO cartDTO = response.getBody();
 
-        return new ResponseEntity<>(cartDTO, response.getStatusCode());
+            return new ResponseEntity<>(cartDTO, response.getStatusCode());
+        } catch (HttpClientErrorException e) {
+            throw new APIException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/public/carts/{cartId}/product/{productId}")

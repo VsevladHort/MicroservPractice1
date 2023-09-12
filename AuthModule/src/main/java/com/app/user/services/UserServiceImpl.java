@@ -2,6 +2,7 @@ package com.app.user.services;
 
 import com.app.cart.*;
 import com.app.constants.AppConstants;
+import com.app.entities.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -54,8 +56,8 @@ public class UserServiceImpl implements UserService {
             User user = modelMapper.map(userDTO, User.class);
 
             Cart cart = new Cart();
+
             user.setCart(cart);
-            cart.setUser(modelMapper.map(user, UserCart.class));
 
             Role role = roleRepo.findById(AppConstants.USER_ID).get();
             user.getRoles().add(role);
@@ -79,8 +81,7 @@ public class UserServiceImpl implements UserService {
             user.setAddresses(List.of(address));
 
             User registeredUser = userRepo.save(user);
-
-            cart.setUser(modelMapper.map(registeredUser, UserCart.class));
+            cart.setUser(registeredUser);
 
             userDTO = modelMapper.map(registeredUser, UserDTO.class);
 
@@ -219,20 +220,24 @@ public class UserServiceImpl implements UserService {
         Long cartId = user.getCart().getCartId();
 
         cartItems.forEach(item -> {
-            Long productId = item.getProduct().getProductId();
+            try {
+                Long productId = item.getProduct().getProductId();
 
-            // Make a call to the cart service endpoint to delete the product from the cart
-            ResponseEntity<String> response = restTemplate.exchange(
-                    cartServiceUrl + "/public/carts/{cartId}/product/{productId}",
-                    HttpMethod.DELETE,
-                    null,
-                    String.class,
-                    cartId,
-                    productId
-            );
+                // Make a call to the cart service endpoint to delete the product from the cart
+                ResponseEntity<String> response = restTemplate.exchange(
+                        cartServiceUrl + "/public/carts/{cartId}/product/{productId}",
+                        HttpMethod.DELETE,
+                        null,
+                        String.class,
+                        cartId,
+                        productId
+                );
 
-            if (response.getStatusCode() != HttpStatus.OK) {
-                throw new CartServiceException("Failed to delete product from cart for the user, deletion of which was requested");
+                if (response.getStatusCode() != HttpStatus.OK) {
+                    throw new CartServiceException("Failed to delete product from cart for the user, deletion of which was requested");
+                }
+            } catch (HttpClientErrorException e) {
+                throw new APIException(e.getMessage());
             }
         });
 
