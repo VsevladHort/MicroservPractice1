@@ -6,6 +6,8 @@ import java.util.Map;
 import com.app.user.services.UserDTO;
 import com.app.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,48 +24,55 @@ import com.app.security.JWTUtil;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "E-Commerce Application")
 public class AuthController {
 
-	@Autowired
-	private UserService userService;
+    @Value("${com.app.user-service-url}")
+    private String userService;
 
-	@Autowired
-	private JWTUtil jwtUtil;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private JWTUtil jwtUtil;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	@PostMapping("/register")
-	public ResponseEntity<Map<String, Object>> registerHandler(@Valid @RequestBody UserDTO user) throws UserNotFoundException {
-		String encodedPass = passwordEncoder.encode(user.getPassword());
 
-		user.setPassword(encodedPass);
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, Object>> registerHandler(@Valid @RequestBody UserDTO user) throws UserNotFoundException {
+        String url = userService + "/public/users/register";
 
-		UserDTO userDTO = userService.registerUser(user);
+        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(user);
 
-		String token = jwtUtil.generateToken(userDTO.getEmail());
+        ResponseEntity<UserDTO> response = restTemplate.postForEntity(url, requestEntity, UserDTO.class);
 
-		return new ResponseEntity<Map<String, Object>>(Collections.singletonMap("jwt-token", token),
-				HttpStatus.CREATED);
-	}
+        UserDTO userDTO = response.getBody();
+        if (userDTO == null) {
+            throw new RuntimeException("Internal service error!");
+        }
 
-	@PostMapping("/login")
-	public Map<String, Object> loginHandler(@Valid @RequestBody LoginCredentials credentials) {
+        String token = jwtUtil.generateToken(userDTO.getEmail());
 
-		UsernamePasswordAuthenticationToken authCredentials = new UsernamePasswordAuthenticationToken(
-				credentials.getEmail(), credentials.getPassword());
+        return new ResponseEntity<Map<String, Object>>(Collections.singletonMap("jwt-token", token),
+                HttpStatus.CREATED);
+    }
 
-		authenticationManager.authenticate(authCredentials);
+    @PostMapping("/login")
+    public Map<String, Object> loginHandler(@Valid @RequestBody LoginCredentials credentials) {
 
-		String token = jwtUtil.generateToken(credentials.getEmail());
+        UsernamePasswordAuthenticationToken authCredentials = new UsernamePasswordAuthenticationToken(
+                credentials.getEmail(), credentials.getPassword());
 
-		return Collections.singletonMap("jwt-token", token);
-	}
+        authenticationManager.authenticate(authCredentials);
+
+        String token = jwtUtil.generateToken(credentials.getEmail());
+
+        return Collections.singletonMap("jwt-token", token);
+    }
 }

@@ -5,13 +5,18 @@ import com.app.constants.AppConstants;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private AddressRepo addressRepo;
 
     @Autowired
-    private CartService cartService;
+    private RestTemplate restTemplate;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -38,14 +43,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${com.app.cart-service-url}")
+    private String cartServiceUrl;
+
     @Override
     public UserDTO registerUser(UserDTO userDTO) {
 
         try {
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             User user = modelMapper.map(userDTO, User.class);
 
             Cart cart = new Cart();
             user.setCart(cart);
+            cart.setUser(modelMapper.map(user, UserCart.class));
 
             Role role = roleRepo.findById(AppConstants.USER_ID).get();
             user.getRoles().add(role);
@@ -209,10 +219,21 @@ public class UserServiceImpl implements UserService {
         Long cartId = user.getCart().getCartId();
 
         cartItems.forEach(item -> {
-
             Long productId = item.getProduct().getProductId();
 
-            cartService.deleteProductFromCart(cartId, productId);
+            // Make a call to the cart service endpoint to delete the product from the cart
+            ResponseEntity<String> response = restTemplate.exchange(
+                    cartServiceUrl + "/public/carts/{cartId}/product/{productId}",
+                    HttpMethod.DELETE,
+                    null,
+                    String.class,
+                    cartId,
+                    productId
+            );
+
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new CartServiceException("Failed to delete product from cart for the user, deletion of which was requested");
+            }
         });
 
         userRepo.delete(user);
